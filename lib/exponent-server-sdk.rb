@@ -309,7 +309,7 @@ module Exponent
     def self.error_names
       %w[DeviceNotRegistered MessageTooBig
          MessageRateExceeded InvalidCredentials
-         Unknown GatewayError]
+         Unknown Gateway]
     end
 
     error_names.each do |error_name|

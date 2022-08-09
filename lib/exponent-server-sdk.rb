@@ -280,7 +280,7 @@ module Exponent
       end
 
       def unknown_error_format(response)
-        Exponent::Push::UnknownError.new("Unknown error format (#{response&.return_code}): #{response.respond_to?(:body) ? response.body : response.inspect}. status_message: #{response&.status_message}. debug_info: #{response&.debug_info}")      
+        Exponent::Push::UnknownError.new("Unknown error format (#{response&.response_code}): #{response.respond_to?(:body) ? response.body : response.inspect}. status_message: #{response&.status_message}. debug_info: #{response&.debug_info}")      
       end
 
       ##### DEPRECATED METHODS #####

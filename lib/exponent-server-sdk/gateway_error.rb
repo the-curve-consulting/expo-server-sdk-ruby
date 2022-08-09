@@ -1,2 +1,0 @@
-class GatewayError < StandardError
-end

@@ -1,6 +1,5 @@
 require 'exponent-server-sdk/version'
 require 'exponent-server-sdk/too_many_messages_error'
-require 'exponent-server-sdk/gateway_error'
 require 'typhoeus'
 require 'json'
 
@@ -267,8 +266,6 @@ module Exponent
       def with_error_handling(response)
         yield(response)
       rescue KeyError, NoMethodError
-        GatewayError.new("Transient gateway error, HTTP status code: #{code}") if response&.response_code&.between(500, 599)
-
         unknown_error_format(response)
       end
 
@@ -283,6 +280,8 @@ module Exponent
       end
 
       def unknown_error_format(response)
+        return Exponent::Push::GatewayError.new("Transient gateway error, HTTP status code: #{code}") if response&.response_code&.between(500, 599)
+
         Exponent::Push::UnknownError.new("Unknown error format (#{response&.response_code}): #{response.respond_to?(:body) ? response.body : response.inspect}. status_message: #{response&.status_message}. debug_info: #{response&.debug_info}")      
       end
 
@@ -310,7 +309,7 @@ module Exponent
     def self.error_names
       %w[DeviceNotRegistered MessageTooBig
          MessageRateExceeded InvalidCredentials
-         Unknown]
+         Unknown GatewayError]
     end
 
     error_names.each do |error_name|

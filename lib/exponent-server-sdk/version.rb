@@ -1,3 +1,3 @@
 module Exponent
-  VERSION = '0.1.0g'.freeze
+  VERSION = '0.1.0h'.freeze
 end

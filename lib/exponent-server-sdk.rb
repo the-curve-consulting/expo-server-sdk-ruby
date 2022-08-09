@@ -267,7 +267,7 @@ module Exponent
       def with_error_handling(response)
         yield(response)
       rescue KeyError, NoMethodError
-        raise GatewayError, "Transient gateway error, HTTP status code: #{code}" if response&.response_code&.between(500, 599)        
+        GatewayError.new("Transient gateway error, HTTP status code: #{code}" if response&.response_code&.between(500, 599))
 
         unknown_error_format(response)
       end

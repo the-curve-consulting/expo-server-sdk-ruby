@@ -1,5 +1,6 @@
 require 'exponent-server-sdk/version'
 require 'exponent-server-sdk/too_many_messages_error'
+require 'exponent-server-sdk/gateway_error'
 require 'typhoeus'
 require 'json'
 
@@ -266,6 +267,8 @@ module Exponent
       def with_error_handling(response)
         yield(response)
       rescue KeyError, NoMethodError
+        raise GatewayError, "Transient gateway error, HTTP status code: #{code}" if response&.response_code&.between(500, 599)        
+
         unknown_error_format(response)
       end
 

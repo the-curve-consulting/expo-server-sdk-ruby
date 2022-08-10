@@ -151,6 +151,7 @@ module Exponent
 
       def sort_results
         data = body&.fetch('data', nil) || nil
+        puts "sort_results: #{data&.inspect}"
 
         # something is definitely wrong
         return if data.nil?
@@ -172,6 +173,8 @@ module Exponent
       end
 
       def process_receipts(receipts)
+        puts "process_receipts: #{receipts&.receipts}"
+
         receipts.each do |receipt_id, receipt|
           @receipt_ids.push(receipt_id) unless receipt_id.nil?
           process_error(receipt) unless receipt.fetch('status') == 'ok'
@@ -179,6 +182,8 @@ module Exponent
       end
 
       def process_error(push_ticket)
+        puts "process_error: #{push_ticket&.inspect}"
+
         message      = push_ticket.fetch('message')
         invalid      = message.match(/ExponentPushToken\[(...*)\]/)
         unregistered = message.match(/\"(...*)\"/)
@@ -248,6 +253,8 @@ module Exponent
       end
 
       def parse_push_ticket(push_ticket)
+        puts "parse_push_ticket: #{push_ticket&.inspect}"
+
         with_error_handling(push_ticket) do
           message = push_ticket.fetch('message')
           get_error_class(push_ticket.fetch('details').fetch('error')).new(message)
@@ -266,7 +273,8 @@ module Exponent
 
       def with_error_handling(response)
         yield(response)
-      rescue KeyError, NoMethodError
+      rescue KeyError, NoMethodError => e
+        puts "with_error_handling caught error: #{e.inspect}"
         unknown_error_format(response)
       end
 

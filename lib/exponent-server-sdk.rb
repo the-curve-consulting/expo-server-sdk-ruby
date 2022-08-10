@@ -122,7 +122,7 @@ module Exponent
       def process_response(response)
         @response = response
         pp response
-        case response.code.to_s
+        case response.response_code.to_s
         when /(^4|^5)/
           raise @error_builder.parse_response(response)
         else

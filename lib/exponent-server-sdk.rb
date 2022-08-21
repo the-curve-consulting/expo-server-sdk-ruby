@@ -289,7 +289,7 @@ module Exponent
       end
 
       def unknown_error_format(response)
-        return Exponent::Push::GatewayError.new("Transient gateway error, HTTP status code: #{code}") if response&.response_code&.between(500, 599)
+        return Exponent::Push::GatewayError.new("Transient gateway error, HTTP status code: #{response&.response_code}") if response&.response_code&.between?(500, 599)
 
         Exponent::Push::UnknownError.new("Unknown error format (#{response&.response_code}): #{response.respond_to?(:body) ? response.body : response.inspect}. status_message: #{response&.status_message}. debug_info: #{response&.debug_info}")      
       end

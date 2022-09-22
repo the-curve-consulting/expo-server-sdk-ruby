@@ -84,6 +84,7 @@ module Exponent
 
       def push_url
         'https://exp.host/--/api/v2/push/send'
+        # 'https://httpstat.us/504'
       end
 
       def get_receipts(receipt_ids)
@@ -97,6 +98,7 @@ module Exponent
 
       def receipts_url
         'https://exp.host/--/api/v2/push/getReceipts'
+        # 'https://httpstat.us/504'
       end
 
       def headers
@@ -121,8 +123,8 @@ module Exponent
 
       def process_response(response)
         @response = response
-        puts "code: #{response.code}"
-        puts "response_code: #{response.response_code}"
+        # puts "code: #{response.code}"
+        # puts "response_code: #{response.response_code}"
         case response.response_code.to_s
         when /(^4|^5)/
           raise @error_builder.parse_response(response)
@@ -151,7 +153,7 @@ module Exponent
 
       def sort_results
         data = body&.fetch('data', nil) || nil
-        puts "sort_results: #{data&.inspect}"
+        # puts "sort_results: #{data&.inspect}"
 
         # something is definitely wrong
         return if data.nil?
@@ -173,7 +175,7 @@ module Exponent
       end
 
       def process_receipts(receipts)
-        puts "process_receipts: #{receipts&.receipts}"
+        # puts "process_receipts: #{receipts&.receipts}"
 
         receipts.each do |receipt_id, receipt|
           @receipt_ids.push(receipt_id) unless receipt_id.nil?
@@ -182,7 +184,7 @@ module Exponent
       end
 
       def process_error(push_ticket)
-        puts "process_error: #{push_ticket&.inspect}"
+        # puts "process_error: #{push_ticket&.inspect}"
 
         message      = push_ticket.fetch('message')
         invalid      = message.match(/ExponentPushToken\[(...*)\]/)
@@ -253,7 +255,7 @@ module Exponent
       end
 
       def parse_push_ticket(push_ticket)
-        puts "parse_push_ticket: #{push_ticket&.inspect}"
+        # puts "parse_push_ticket: #{push_ticket&.inspect}"
 
         with_error_handling(push_ticket) do
           message = push_ticket.fetch('message')
@@ -274,7 +276,10 @@ module Exponent
       def with_error_handling(response)
         yield(response)
       rescue KeyError, NoMethodError => e
-        puts "with_error_handling caught error: #{e.inspect}"
+        # puts "with_error_handling caught error: #{e.inspect}"
+        # puts "Exception Occurred #{e}. Message: #{e.message}. Backtrace:  \n #{e.backtrace.join("\n")}"
+        # puts "Exception Occurred #{e}. Message: #{e.message}. Backtrace:  \n #{e.backtrace.join("\n")}"
+   
         unknown_error_format(response)
       end
 
